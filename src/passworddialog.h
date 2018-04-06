@@ -5,6 +5,7 @@
 #include "pass.h"
 #include <QDialog>
 #include <QWidget>
+#include <QTimer>
 
 namespace Ui {
 class PasswordDialog;
@@ -48,6 +49,7 @@ public:
 
   void useTemplate(bool useTemplate);
   void templateAll(bool templateAll);
+  void useClipboard(bool templateAll);
   void setLength(int l);
   void setPasswordCharTemplate(int t);
   void usePwgen(bool usePwgen);
@@ -60,12 +62,16 @@ private slots:
   void on_createPasswordButton_clicked();
 
 private:
+  void copyTextToClipboard(const QString &text);
   Ui::PasswordDialog *ui;
   const passwordConfiguration &m_passConfig;
   QString passTemplate;
   QStringList fields;
+  QString clippedText;
+  QTimer clearClipboardTimer;
   bool templating;
   bool allFields;
+  bool clipboard;
 };
 
 #endif // PASSWORDDIALOG_H_

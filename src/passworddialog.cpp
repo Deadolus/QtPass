@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QLabel>
 #include <QLineEdit>
+#include <QClipboard>
 
 /**
  * @brief PasswordDialog::PasswordDialog basic constructor.
@@ -19,6 +20,9 @@ PasswordDialog::PasswordDialog(const passwordConfiguration &passConfig,
   ui->setupUi(this);
   setLength(m_passConfig.length);
   setPasswordCharTemplate(m_passConfig.selected);
+  clearClipboardTimer.setSingleShot(true);
+  connect(&clearClipboardTimer, SIGNAL(timeout()), this,
+          SLOT(clearClipboard()));
 }
 
 /**
@@ -157,6 +161,14 @@ void PasswordDialog::setFile(QString file) {
 void PasswordDialog::templateAll(bool templateAll) { allFields = templateAll; }
 
 /**
+ * @brief PasswordDialog::useClipboard basic setter for use in
+ * PasswordDialog::setPassword templating all tokenisable lines.
+ * @param useClipboard
+ */
+void PasswordDialog::useClipboard(bool useClipboard) { clipboard = useClipboard; }
+
+
+/**
  * @brief PasswordDialog::useTemplate basic setter for use in
  * PasswordDialog::useTemplate templating.
  * @param useTemplate
@@ -192,4 +204,22 @@ void PasswordDialog::usePwgen(bool usePwgen) {
 void PasswordDialog::setPass(const QString &output) {
   setPassword(output);
   //    TODO(bezet): enable ui
+}
+
+/**
+ * @brief PasswordDialog::copyTextToClipboard copies text to your clipboard
+ * @param text
+ */
+void PasswordDialog::copyTextToClipboard(const QString &text) {
+  QClipboard *clip = QApplication::clipboard();
+  if (!QtPassSettings::isUseSelection()) {
+    clip->setText(text, QClipboard::Clipboard);
+  } else {
+    clip->setText(text, QClipboard::Selection);
+  }
+  clippedText = text;
+  //ui->statusBar->showMessage(tr("Copied to clipboard"), 2000);
+  if (QtPassSettings::isUseAutoclear()) {
+    clearClipboardTimer.start();
+  }
 }
