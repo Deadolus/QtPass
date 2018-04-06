@@ -33,6 +33,7 @@ public:
   const static QString gitExecutable;
   const static QString gpgExecutable;
   const static QString pwgenExecutable;
+  const static QString keybaseExecutable;
   const static QString gpgHome;
   const static QString useWebDav;
   const static QString webDavUrl;
