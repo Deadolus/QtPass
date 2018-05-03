@@ -28,6 +28,7 @@ public:
   void setPassPath(QString);
   void setGitPath(QString);
   void setGpgPath(QString);
+  void setKeybasePath(QString);
   void setStorePath(QString);
   void setProfiles(QHash<QString, QString>, QString);
   void usePass(bool usePass);
@@ -43,6 +44,7 @@ public:
   QString getPassPath();
   QString getGitPath();
   QString getGpgPath();
+  QString getKeybasePath();
   QString getStorePath();
   QHash<QString, QString> getProfiles();
   bool usePass();
@@ -65,6 +67,8 @@ public:
   void startMinimized(bool startMinimized);
   void useGit(bool useGit);
   bool useGit();
+  void useKeybase(bool useKeybase);
+  bool useKeybase();
   QString getPwgenPath();
   void setPwgenPath(QString);
   void usePwgen(bool usePwgen);
@@ -103,10 +107,12 @@ protected:
 private slots:
   void on_radioButtonNative_clicked();
   void on_radioButtonPass_clicked();
+  void on_radioButtonKeybase_clicked();
   void on_toolButtonGit_clicked();
   void on_toolButtonGpg_clicked();
   void on_toolButtonPwgen_clicked();
   void on_toolButtonPass_clicked();
+  void on_toolButtonKeybase_clicked();
   void on_toolButtonStore_clicked();
   void on_comboBoxClipboard_activated(int);
   void on_passwordCharTemplateSelector_activated(int);

@@ -104,6 +104,10 @@ public:
   static void setPwgenExecutable(const QString &pwgenExecutable);
 
   static QString
+  getKeybaseExecutable(const QString &defaultValue = QVariant().toString());
+  static void setKeybaseExecutable(const QString &keybaseExecutable);
+
+  static QString
   getGpgHome(const QString &defaultValue = QVariant().toString());
   static void setGpgHome(const QString &gpgHome);
 
@@ -128,6 +132,9 @@ public:
 
   static bool isUseGit(const bool &defaultValue = QVariant().toBool());
   static void setUseGit(const bool &useGit);
+
+  static bool isUseKeybase(const bool &defaultValue = QVariant().toBool());
+  static void setUseKeybase(const bool &useKeybase);
 
   static bool isUsePwgen(const bool &defaultValue = QVariant().toBool());
   static void setUsePwgen(const bool &usePwgen);

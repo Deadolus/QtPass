@@ -277,6 +277,10 @@ bool MainWindow::checkConfig() {
       QtPassSettings::getPwgenExecutable(Util::findBinaryInPath("pwgen"));
   QtPassSettings::setPwgenExecutable(pwgenExecutable);
 
+  QString keybaseExecutable =
+      QtPassSettings::getKeybaseExecutable(Util::findBinaryInPath("keybase"));
+  QtPassSettings::setKeybaseExecutable(keybaseExecutable);
+
   pwdConfig.length = QtPassSettings::getPasswordLength();
   pwdConfig.selected = static_cast<passwordConfiguration::characterSet>(
       QtPassSettings::getPasswordCharsselection());
@@ -404,6 +408,7 @@ void MainWindow::config() {
   d->setPassPath(QtPassSettings::getPassExecutable());
   d->setGitPath(QtPassSettings::getGitExecutable());
   d->setGpgPath(QtPassSettings::getGpgExecutable());
+  d->setKeybasePath(QtPassSettings::getKeybaseExecutable());
   d->setStorePath(QtPassSettings::getPassStore());
   d->usePass(QtPassSettings::isUsePass());
   d->useClipboard(QtPassSettings::getClipBoardType());
@@ -461,6 +466,7 @@ void MainWindow::config() {
       QtPassSettings::setStartMinimized(d->startMinimized());
       QtPassSettings::setProfiles(d->getProfiles());
       QtPassSettings::setUseGit(d->useGit());
+      QtPassSettings::setUseKeybase(d->useKeybase());
       QtPassSettings::setPwgenExecutable(d->getPwgenPath());
       QtPassSettings::setUsePwgen(d->usePwgen());
       QtPassSettings::setAvoidCapitals(d->avoidCapitals());
@@ -618,6 +624,14 @@ void MainWindow::deselect() {
  */
 void MainWindow::executePassGitInit() {
   dbg() << "Pass git init called";
+  QtPassSettings::getPass()->GitInit();
+}
+
+/**
+ * @brief MainWindow::executePassKeybaseInit keybase init wrapper
+ */
+void MainWindow::executePassKeybaseInit() {
+  dbg() << "Pass keybase init called";
   QtPassSettings::getPass()->GitInit();
 }
 

@@ -53,6 +53,7 @@ public:
   void userDialog(QString = "");
   void config();
   void executePassGitInit();
+  void executePassKeybaseInit();
 
   /**
    * @brief MainWindow::pwdConfig instance of passwordConfiguration.

@@ -44,6 +44,7 @@ ConfigDialog::~ConfigDialog() {
   QtPassSettings::setGitExecutable(ui->gitPath->text());
   QtPassSettings::setGpgExecutable(ui->gpgPath->text());
   QtPassSettings::setPassExecutable(ui->passPath->text());
+  QtPassSettings::setKeybaseExecutable(ui->keybasePath->text());
 }
 
 /**
@@ -72,6 +73,12 @@ void ConfigDialog::setGitPath(QString path) {
  * @param path
  */
 void ConfigDialog::setGpgPath(QString path) { ui->gpgPath->setText(path); }
+
+/**
+ * @brief ConfigDialog::setKeybasePath set the keybase executable path.
+ * @param path
+ */
+void ConfigDialog::setKeybasePath(QString path) { ui->keybasePath->setText(path); }
 
 /**
  * @brief ConfigDialog::setStorePath set the .password-store folder path.
@@ -139,16 +146,29 @@ void ConfigDialog::on_radioButtonNative_clicked() { setGroupBoxState(); }
 void ConfigDialog::on_radioButtonPass_clicked() { setGroupBoxState(); }
 
 /**
+ * @brief ConfigDialog::on_radioButtonKeybase_clicked wrapper for
+ * ConfigDialog::setGroupBoxState()
+ */
+void ConfigDialog::on_radioButtonKeybase_clicked() { setGroupBoxState(); }
+
+/**
  * @brief ConfigDialog::setGroupBoxState update checkboxes.
  */
 void ConfigDialog::setGroupBoxState() {
   if (ui->radioButtonPass->isChecked()) {
     ui->groupBoxNative->setEnabled(false);
+    ui->groupBoxKeybase->setEnabled(false);
     ui->groupBoxPass->setEnabled(true);
-  } else {
+  } else if(ui->radioButtonNative->isChecked()) {
     ui->groupBoxNative->setEnabled(true);
     ui->groupBoxPass->setEnabled(false);
+    ui->groupBoxKeybase->setEnabled(false);
+  } else {
+    ui->groupBoxNative->setEnabled(false);
+    ui->groupBoxPass->setEnabled(false);
+    ui->groupBoxKeybase->setEnabled(true);
   }
+
 }
 
 /**
@@ -211,6 +231,15 @@ void ConfigDialog::on_toolButtonPass_clicked() {
   QString pass = selectExecutable();
   if (!pass.isEmpty())
     ui->passPath->setText(pass);
+}
+
+/**
+ * @brief ConfigDialog::on_toolButtonKeybase_clicked get keybase application.
+ */
+void ConfigDialog::on_toolButtonKeybase_clicked() {
+  QString keybase = selectExecutable();
+  if (!keybase.isEmpty())
+    ui->keybasePath->setText(keybase);
 }
 
 /**
@@ -584,6 +613,10 @@ void ConfigDialog::wizard() {
 #endif
       if (useGit())
         mainWindow->executePassGitInit();
+
+      if (useKeybase())
+        mainWindow->executePassKeybaseInit();
+
       mainWindow->userDialog(passStore);
     }
   }
@@ -693,6 +726,21 @@ void ConfigDialog::useGit(bool useGit) {
  * @return
  */
 bool ConfigDialog::useGit() { return ui->checkBoxUseGit->isChecked(); }
+
+/**
+ * @brief ConfigDialog::useKeybase set preference for using keybase.
+ * @param useKeybase
+ */
+void ConfigDialog::useKeybase(bool useKeybase) {
+  ui->checkBoxUseKeybase->setChecked(useKeybase);
+  on_checkBoxUseKeybase_clicked();
+}
+
+/**
+ * @brief ConfigDialog::useKeybase retrun preference for using keybase.
+ * @return
+ */
+bool ConfigDialog::useKeybase() { return ui->checkBoxUseKeybase->isChecked(); }
 
 /**
  * @brief ConfigDialog::on_checkBoxUseGit_clicked enable or disable related

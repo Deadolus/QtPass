@@ -260,6 +260,14 @@ void QtPassSettings::setPwgenExecutable(const QString &pwgenExecutable) {
   setStringValue(SettingsConstants::pwgenExecutable, pwgenExecutable);
 }
 
+QString QtPassSettings::getKeybaseExecutable(const QString &defaultValue) {
+  return getStringValue(SettingsConstants::keybaseExecutable, defaultValue);
+}
+
+void QtPassSettings::setKeybaseExecutable(const QString &keybaseExecutable) {
+  setStringValue(SettingsConstants::keybaseExecutable, keybaseExecutable);
+}
+
 QString QtPassSettings::getGpgHome(const QString &defaultValue) {
   return getStringValue(SettingsConstants::gpgHome, defaultValue);
 }
@@ -314,6 +322,14 @@ bool QtPassSettings::isUseGit(const bool &defaultValue) {
 
 void QtPassSettings::setUseGit(const bool &useGit) {
   setBoolValue(SettingsConstants::useGit, useGit);
+}
+
+bool QtPassSettings::isUseKeybase(const bool &defaultValue) {
+  return getBoolValue(SettingsConstants::useKeybase, defaultValue);
+}
+
+void QtPassSettings::setUseKeybase(const bool &useKeybase) {
+  setBoolValue(SettingsConstants::useKeybase, useKeybase);
 }
 
 bool QtPassSettings::isUsePwgen(const bool &defaultValue) {
@@ -624,8 +640,10 @@ Pass *QtPassSettings::getPass() {
   if (!pass) {
     if (isUsePass()) {
       QtPassSettings::pass = &QtPassSettings::realPass;
-    } else {
+    } else if(isUseGit()){
       QtPassSettings::pass = &QtPassSettings::imitatePass;
+    } else {
+      QtPassSettings::pass = &QtPassSettings::Keybase;
     }
     pass->init();
   }

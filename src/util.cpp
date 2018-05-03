@@ -122,7 +122,8 @@ bool Util::checkConfig() {
   return !QFile(QDir(QtPassSettings::getPassStore()).filePath(".gpg-id"))
               .exists() ||
          (!QFile(QtPassSettings::getPassExecutable()).exists() &&
-          !QFile(QtPassSettings::getGpgExecutable()).exists());
+          !QFile(QtPassSettings::getGpgExecutable()).exists() &&
+          !QFile(QtPassSettings::getKeybaseExecutable()).exists() );
 }
 
 /**

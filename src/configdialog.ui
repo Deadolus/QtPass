@@ -612,6 +612,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QRadioButton" name="radioButtonKeybase">
+           <property name="text">
+            <string>&amp;Use keybase</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -735,6 +742,40 @@
          </layout>
         </widget>
        </item>
+
+        <item>
+          <widget class="QGroupBox" name="groupBoxKeybase">
+            <property name="title">
+              <string>Keybase</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <property name="sizeConstraint">
+                    <enum>QLayout::SetMinimumSize</enum>
+                  </property>
+                  <item>
+                    <widget class="QLabel" name="labelKeybasePath">
+                      <property name="text">
+                        <string>keybase</string>
+                      </property>
+                    </widget>
+                  </item>
+                  <item>
+                    <widget class="QLineEdit" name="keybasePath"/>
+                  </item>
+                  <item>
+                    <widget class="QToolButton" name="toolButtonKeybase">
+                      <property name="text">
+                        <string>...</string>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </item>
+            </layout>
+          </widget>
+        </item>
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
