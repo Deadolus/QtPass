@@ -753,6 +753,13 @@ void ConfigDialog::on_checkBoxUseGit_clicked() {
 }
 
 /**
+ * @brief ConfigDialog::on_checkBoxUseGit_clicked enable or disable related
+ * checkboxes.
+ */
+void ConfigDialog::on_checkBoxUseKeybase_clicked() {
+}
+
+/**
  * @brief ConfigDialog::on_toolButtonPwgen_clicked enable or disable related
  * options in the interface.
  */

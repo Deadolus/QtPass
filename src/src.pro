@@ -21,6 +21,7 @@ SOURCES   += mainwindow.cpp \
              pass.cpp \
              realpass.cpp \
              imitatepass.cpp \
+             keybase.cpp \
              executor.cpp \
              simpletransaction.cpp
 
@@ -41,6 +42,7 @@ HEADERS   += mainwindow.h \
              pass.h \
              realpass.h \
              imitatepass.h \
+             keybase.h \
              datahelpers.h \
              debughelper.h \
              executor.h \

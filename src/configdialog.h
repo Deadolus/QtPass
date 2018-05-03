@@ -123,6 +123,7 @@ private slots:
   void on_deleteButton_clicked();
   void on_checkBoxUseTrayIcon_clicked();
   void on_checkBoxUseGit_clicked();
+  void on_checkBoxUseKeybase_clicked();
   void on_checkBoxUsePwgen_clicked();
   void on_checkBoxUseTemplate_clicked();
 

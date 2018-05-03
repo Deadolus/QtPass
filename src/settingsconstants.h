@@ -42,6 +42,7 @@ public:
   const static QString profile;
   const static QString groupProfiles;
   const static QString useGit;
+  const static QString useKeybase;
   const static QString useClipboard;
   const static QString usePwgen;
   const static QString avoidCapitals;

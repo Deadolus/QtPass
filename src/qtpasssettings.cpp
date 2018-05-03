@@ -17,6 +17,7 @@ QHash<QString, bool> QtPassSettings::boolSettings;
 Pass *QtPassSettings::pass;
 RealPass QtPassSettings::realPass;
 ImitatePass QtPassSettings::imitatePass;
+Keybase QtPassSettings::keybase;
 
 QString QtPassSettings::getVersion(const QString &defaultValue) {
   return getStringValue(SettingsConstants::version, defaultValue);
@@ -638,13 +639,14 @@ void QtPassSettings::setSetting(const QString &key, const QVariant &value) {
 
 Pass *QtPassSettings::getPass() {
   if (!pass) {
-    if (isUsePass()) {
-      QtPassSettings::pass = &QtPassSettings::realPass;
-    } else if(isUseGit()){
-      QtPassSettings::pass = &QtPassSettings::imitatePass;
-    } else {
-      QtPassSettings::pass = &QtPassSettings::Keybase;
-    }
+      QtPassSettings::pass = &QtPassSettings::keybase;
+    /* if (isUsePass()) { */
+    /*   QtPassSettings::pass = &QtPassSettings::realPass; */
+    /* } else if(isUseGit()){ */
+    /*   QtPassSettings::pass = &QtPassSettings::imitatePass; */
+    /* } else { */
+    /*   QtPassSettings::pass = &QtPassSettings::keybase; */
+    /* } */
     pass->init();
   }
   return pass;
@@ -653,3 +655,5 @@ Pass *QtPassSettings::getPass() {
 ImitatePass *QtPassSettings::getImitatePass() { return &imitatePass; }
 
 RealPass *QtPassSettings::getRealPass() { return &realPass; }
+
+Keybase *QtPassSettings::getKeybase() { return &keybase; }

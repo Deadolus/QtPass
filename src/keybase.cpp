@@ -1,4 +1,4 @@
-#include "imitatepass.h"
+#include "keybase.h"
 #include "debughelper.h"
 #include "qtpasssettings.h"
 #include <QDirIterator>
@@ -6,58 +6,58 @@
 using namespace Enums;
 
 /**
- * @brief ImitatePass::ImitatePass for situaions when pass is not available
+ * @brief Keybase::Keybase for situaions when pass is not available
  * we imitate the behavior of pass https://www.passwordstore.org/
  */
-ImitatePass::ImitatePass() {}
+Keybase::Keybase() {}
 
 /**
- * @brief ImitatePass::GitInit git init wrapper
+ * @brief Keybase::GitInit git init wrapper
  */
-void ImitatePass::GitInit() {
+void Keybase::GitInit() {
   executeGit(GIT_INIT, {"init", QtPassSettings::getPassStore()});
 }
 
 /**
- * @brief ImitatePass::GitPull git init wrapper
+ * @brief Keybase::GitPull git init wrapper
  */
-void ImitatePass::GitPull() { executeGit(GIT_PULL, {"pull"}); }
+void Keybase::GitPull() { executeGit(GIT_PULL, {"pull"}); }
 
 /**
- * @brief ImitatePass::GitPull_b git pull wrapper
+ * @brief Keybase::GitPull_b git pull wrapper
  */
-void ImitatePass::GitPull_b() {
+void Keybase::GitPull_b() {
   exec.executeBlocking(QtPassSettings::getGitExecutable(), {"pull"});
 }
 
 /**
- * @brief ImitatePass::GitPush git init wrapper
+ * @brief Keybase::GitPush git init wrapper
  */
-void ImitatePass::GitPush() {
+void Keybase::GitPush() {
   if (QtPassSettings::isUseGit()) {
     executeGit(GIT_PUSH, {"push"});
   }
 }
 
 /**
- * @brief ImitatePass::Show shows content of file
+ * @brief Keybase::Show shows content of file
  */
 
-void ImitatePass::Show(QString file) {
+void Keybase::Show(QString file) {
   file = QtPassSettings::getPassStore() + file + ".gpg";
-  QStringList args = {"-d",      "--quiet",     "--yes", "--no-encrypt-to",
-                      "--batch", "--use-agent", file};
+  QStringList args = {"pgp",      "decrypt",     "-i",
+                       file};
   executeGpg(PASS_SHOW, args);
 }
 
 /**
- * @brief ImitatePass::Insert create new file with encrypted content
+ * @brief Keybase::Insert create new file with encrypted content
  *
  * @param file      file to be created
  * @param newValue  value to be stored in file
  * @param overwrite whether to overwrite existing file
  */
-void ImitatePass::Insert(QString file, QString newValue, bool overwrite) {
+void Keybase::Insert(QString file, QString newValue, bool overwrite) {
   file = file + ".gpg";
   transactionHelper trans(this, PASS_INSERT);
   QStringList recipients = Pass::getRecipientList(file);
@@ -68,7 +68,7 @@ void ImitatePass::Insert(QString file, QString newValue, bool overwrite) {
                      "file missing or invalid."));
     return;
   }
-  QStringList args = {"--batch", "-eq", "--output", file};
+  QStringList args = {"pgp", "encrypt", "-i", file};
   for (auto &r : recipients) {
     args.append("-r");
     args.append(r);
@@ -90,19 +90,19 @@ void ImitatePass::Insert(QString file, QString newValue, bool overwrite) {
 }
 
 /**
- * @brief ImitatePass::GitCommit commit a file to git with an appropriate commit
+ * @brief Keybase::GitCommit commit a file to git with an appropriate commit
  * message
  * @param file
  * @param msg
  */
-void ImitatePass::GitCommit(const QString &file, const QString &msg) {
+void Keybase::GitCommit(const QString &file, const QString &msg) {
   executeGit(GIT_COMMIT, {"commit", "-m", msg, "--", file});
 }
 
 /**
- * @brief ImitatePass::Remove custom implementation of "pass remove"
+ * @brief Keybase::Remove custom implementation of "pass remove"
  */
-void ImitatePass::Remove(QString file, bool isDir) {
+void Keybase::Remove(QString file, bool isDir) {
   file = QtPassSettings::getPassStore() + file;
   transactionHelper trans(this, PASS_REMOVE);
   if (!isDir)
@@ -126,13 +126,13 @@ void ImitatePass::Remove(QString file, bool isDir) {
 }
 
 /**
- * @brief ImitatePass::Init initialize pass repository
+ * @brief Keybase::Init initialize pass repository
  *
  * @param path      path in which new password-store will be created
  * @param users     list of users who shall be able to decrypt passwords in
  * path
  */
-void ImitatePass::Init(QString path, const QList<UserInfo> &users) {
+void Keybase::Init(QString path, const QList<UserInfo> &users) {
   QString gpgIdFile = path + ".gpg-id";
   QFile gpgId(gpgIdFile);
   bool addFile = false;
@@ -175,11 +175,11 @@ void ImitatePass::Init(QString path, const QList<UserInfo> &users) {
 }
 
 /**
- * @brief ImitatePass::removeDir delete folder recursive.
+ * @brief Keybase::removeDir delete folder recursive.
  * @param dirName which folder.
  * @return was removal succesful?
  */
-bool ImitatePass::removeDir(const QString &dirName) {
+bool Keybase::removeDir(const QString &dirName) {
   bool result = true;
   QDir dir(dirName);
 
@@ -202,13 +202,13 @@ bool ImitatePass::removeDir(const QString &dirName) {
 }
 
 /**
- * @brief ImitatePass::reencryptPath reencrypt all files under the chosen
+ * @brief Keybase::reencryptPath reencrypt all files under the chosen
  * directory
  *
  * This is stil quite experimental..
  * @param dir
  */
-void ImitatePass::reencryptPath(QString dir) {
+void Keybase::reencryptPath(QString dir) {
   emit statusMsg(tr("Re-encrypting from folder %1").arg(dir), 3000);
   emit startReencryptPath();
   if (QtPassSettings::isAutoPull()) {
@@ -301,7 +301,7 @@ void ImitatePass::reencryptPath(QString dir) {
   emit endReencryptPath();
 }
 
-void ImitatePass::Move(const QString src, const QString dest,
+void Keybase::Move(const QString src, const QString dest,
                        const bool force) {
   QFileInfo destFileInfo(dest);
   transactionHelper trans(this, PASS_MOVE);
@@ -339,7 +339,7 @@ void ImitatePass::Move(const QString src, const QString dest,
   }
 }
 
-void ImitatePass::Copy(const QString src, const QString dest,
+void Keybase::Copy(const QString src, const QString dest,
                        const bool force) {
   QFileInfo destFileInfo(dest);
   transactionHelper trans(this, PASS_COPY);
@@ -372,26 +372,26 @@ void ImitatePass::Copy(const QString src, const QString dest,
 }
 
 /**
- * @brief ImitatePass::executeGpg easy wrapper for running gpg commands
+ * @brief Keybase::executeGpg easy wrapper for running gpg commands
  * @param args
  */
-void ImitatePass::executeGpg(PROCESS id, const QStringList &args, QString input,
+void Keybase::executeGpg(PROCESS id, const QStringList &args, QString input,
                              bool readStdout, bool readStderr) {
   executeWrapper(id, QtPassSettings::getGpgExecutable(), args, input,
                  readStdout, readStderr);
 }
 /**
- * @brief ImitatePass::executeGit easy wrapper for running git commands
+ * @brief Keybase::executeGit easy wrapper for running git commands
  * @param args
  */
-void ImitatePass::executeGit(PROCESS id, const QStringList &args, QString input,
+void Keybase::executeGit(PROCESS id, const QStringList &args, QString input,
                              bool readStdout, bool readStderr) {
   executeWrapper(id, QtPassSettings::getGitExecutable(), args, input,
                  readStdout, readStderr);
 }
 
 /**
- * @brief ImitatePass::finished this function is overloaded to ensure
+ * @brief Keybase::finished this function is overloaded to ensure
  *                              identical behaviour to RealPass ie. only PASS_*
  *                              processes are visible inside Pass::finish, so
  *                              that interface-wise it all looks the same
@@ -400,7 +400,7 @@ void ImitatePass::executeGit(PROCESS id, const QStringList &args, QString input,
  * @param out
  * @param err
  */
-void ImitatePass::finished(int id, int exitCode, const QString &out,
+void Keybase::finished(int id, int exitCode, const QString &out,
                            const QString &err) {
   dbg() << "Imitate Pass";
   static QString transactionOutput;
@@ -434,7 +434,7 @@ void ImitatePass::finished(int id, int exitCode, const QString &out,
  * @param readStdout
  * @param readStderr
  */
-void ImitatePass::executeWrapper(PROCESS id, const QString &app,
+void Keybase::executeWrapper(PROCESS id, const QString &app,
                                  const QStringList &args, QString input,
                                  bool readStdout, bool readStderr) {
   transactionAdd(id);

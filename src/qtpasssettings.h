@@ -5,6 +5,7 @@
 #include "imitatepass.h"
 #include "pass.h"
 #include "realpass.h"
+#include "keybase.h"
 #include <QByteArray>
 #include <QCoreApplication>
 #include <QDir>
@@ -197,6 +198,7 @@ public:
   static Pass *getPass();
   static RealPass *getRealPass();
   static ImitatePass *getImitatePass();
+  static Keybase *getKeybase();
 
 signals:
 
@@ -220,6 +222,7 @@ private:
   static Pass *pass;
   static RealPass realPass;
   static ImitatePass imitatePass;
+  static Keybase keybase;
 
   // functions
   static QSettings &getSettings();

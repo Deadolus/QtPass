@@ -457,6 +457,16 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QCheckBox" name="checkBoxUseKeybase">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Use Keybase</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>

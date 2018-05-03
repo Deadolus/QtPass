@@ -35,6 +35,7 @@ const QString SettingsConstants::webDavPassword = "webDavPassword";
 const QString SettingsConstants::profile = "profile";
 const QString SettingsConstants::groupProfiles = "profiles";
 const QString SettingsConstants::useGit = "useGit";
+const QString SettingsConstants::useKeybase = "useKeybase";
 const QString SettingsConstants::useClipboard = "useClipboard";
 const QString SettingsConstants::usePwgen = "usePwgen";
 const QString SettingsConstants::avoidCapitals = "avoidCapitals";

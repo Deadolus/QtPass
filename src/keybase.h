@@ -1,5 +1,5 @@
-#ifndef IMITATEPASS_H
-#define IMITATEPASS_H
+#ifndef KEYBASE_H
+#define KEYBASE_H
 
 #include "pass.h"
 #include "simpletransaction.h"
@@ -44,8 +44,8 @@ protected:
                               bool readStderr = true) Q_DECL_OVERRIDE;
 
 public:
-  ImitatePass();
-  virtual ~ImitatePass() {}
+  Keybase();
+  virtual ~Keybase() {}
   virtual void GitInit() Q_DECL_OVERRIDE;
   virtual void GitPull() Q_DECL_OVERRIDE;
   virtual void GitPull_b() Q_DECL_OVERRIDE;
@@ -69,4 +69,4 @@ public:
             const bool force = false) Q_DECL_OVERRIDE;
 };
 
-#endif // IMITATEPASS_H
+#endif // KEYBASE_H
