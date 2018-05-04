@@ -47,7 +47,7 @@ void Keybase::Show(QString file) {
   file = QtPassSettings::getPassStore() + file + ".gpg";
   QStringList args = {"pgp",      "decrypt",     "-i",
                        file};
-  executeGpg(PASS_SHOW, args);
+  executeKeybase(PASS_SHOW, args);
 }
 
 /**
@@ -76,7 +76,7 @@ void Keybase::Insert(QString file, QString newValue, bool overwrite) {
   if (overwrite)
     args.append("--yes");
   args.append("-");
-  executeGpg(PASS_INSERT, args, newValue);
+  executeKeybase(PASS_INSERT, args, newValue);
   if (!QtPassSettings::isUseWebDav() && QtPassSettings::isUseGit()) {
     //    TODO(bezet) why not?
     if (!overwrite)
@@ -372,12 +372,13 @@ void Keybase::Copy(const QString src, const QString dest,
 }
 
 /**
- * @brief Keybase::executeGpg easy wrapper for running gpg commands
+ * @brief Keybase::executeKeybase easy wrapper for running gpg commands
  * @param args
  */
-void Keybase::executeGpg(PROCESS id, const QStringList &args, QString input,
+void Keybase::executeKeybase(PROCESS id, const QStringList &args, QString input,
                              bool readStdout, bool readStderr) {
-  executeWrapper(id, QtPassSettings::getGpgExecutable(), args, input,
+    dbg() << "execute Keybase\n";
+  executeWrapper(id, QtPassSettings::getKeybaseExecutable(), args, input,
                  readStdout, readStderr);
 }
 /**
@@ -402,7 +403,7 @@ void Keybase::executeGit(PROCESS id, const QStringList &args, QString input,
  */
 void Keybase::finished(int id, int exitCode, const QString &out,
                            const QString &err) {
-  dbg() << "Imitate Pass";
+  dbg() << "Keybase Pass";
   static QString transactionOutput;
   PROCESS pid = transactionIsOver(static_cast<PROCESS>(id));
   transactionOutput.append(out);
@@ -421,6 +422,7 @@ void Keybase::finished(int id, int exitCode, const QString &out,
       pid = transactionIsOver(static_cast<PROCESS>(id));
     }
   }
+  dbg() << "Transaction output:" << transactionOutput << "\n";
   Pass::finished(pid, exitCode, transactionOutput, err);
   transactionOutput.clear();
 }

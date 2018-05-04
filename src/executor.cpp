@@ -125,6 +125,7 @@ int Executor::executeBlocking(QString app, const QStringList &args,
                               QString input, QString *process_out,
                               QString *process_err) {
   QProcess internal;
+  dbg() << "Execute blocking\n";
   internal.start(app, args);
   if (!input.isEmpty()) {
     QByteArray data = input.toUtf8();
@@ -139,6 +140,7 @@ int Executor::executeBlocking(QString app, const QStringList &args,
     QTextCodec *codec = QTextCodec::codecForLocale();
     QString pout = codec->toUnicode(internal.readAllStandardOutput());
     QString perr = codec->toUnicode(internal.readAllStandardError());
+    dbg() << "Out: " << pout << " err: " << perr << "\n";
     if (process_out != Q_NULLPTR)
       *process_out = pout;
     if (process_err != Q_NULLPTR)
@@ -146,6 +148,7 @@ int Executor::executeBlocking(QString app, const QStringList &args,
     return internal.exitCode();
   } else {
     //  TODO(bezet): emit error() ?
+      dbg() << "Abnormal exit\n";
     return -1; //    QProcess error code + qDebug error?
   }
 }
@@ -192,6 +195,7 @@ int Executor::cancelNext() {
 void Executor::finished(int exitCode, QProcess::ExitStatus exitStatus) {
   execQueueItem i = m_execQueue.dequeue();
   running = false;
+  dbg() << "Finished\n";
   if (exitStatus == QProcess::NormalExit) {
     QString output, err;
     QTextCodec *codec = QTextCodec::codecForLocale();
@@ -202,6 +206,7 @@ void Executor::finished(int exitCode, QProcess::ExitStatus exitStatus) {
       if (exitCode != 0)
         dbg() << exitCode << err;
     }
+    dbg() << "Out: " << output << " err: " << err << "\n";
     emit finished(i.id, exitCode, output, err);
   }
   //	else: emit crashed with ID, which may give a chance to recover ?

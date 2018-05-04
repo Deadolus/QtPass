@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
   //    TODO(bezet): this should be reconnected dynamically when pass changes
   connectPassSignalHandlers(QtPassSettings::getRealPass());
   connectPassSignalHandlers(QtPassSettings::getImitatePass());
+  connectPassSignalHandlers(QtPassSettings::getKeybase());
 
   //    only for ipass
   connect(QtPassSettings::getImitatePass(), SIGNAL(startReencryptPath()), this,
@@ -402,7 +403,7 @@ void MainWindow::config() {
   d->setModal(true);
   // Automatically default to pass if it's available
   if (freshStart && QFile(QtPassSettings::getPassExecutable()).exists()) {
-    QtPassSettings::setUsePass(true);
+    QtPassSettings::setUsePass(true, true);
   }
 
   d->setPassPath(QtPassSettings::getPassExecutable());
@@ -410,7 +411,7 @@ void MainWindow::config() {
   d->setGpgPath(QtPassSettings::getGpgExecutable());
   d->setKeybasePath(QtPassSettings::getKeybaseExecutable());
   d->setStorePath(QtPassSettings::getPassStore());
-  d->usePass(QtPassSettings::isUsePass());
+  d->usePass(QtPassSettings::isUsePass(), QtPassSettings::isUseKeybase());
   d->useClipboard(QtPassSettings::getClipBoardType());
   d->useSelection(QtPassSettings::isUseSelection());
   d->useAutoclear(QtPassSettings::isUseAutoclear());
@@ -451,7 +452,7 @@ void MainWindow::config() {
       QtPassSettings::setGpgExecutable(d->getGpgPath());
       QtPassSettings::setPassStore(
           Util::normalizeFolderPath(d->getStorePath()));
-      QtPassSettings::setUsePass(d->usePass());
+      QtPassSettings::setUsePass(d->usePass(), d->useKeybase());
       QtPassSettings::setClipBoardType(d->useClipboard());
       QtPassSettings::setUseSelection(d->useSelection());
       QtPassSettings::setUseAutoclear(d->useAutoclear());
@@ -579,6 +580,7 @@ QString MainWindow::getFile(const QModelIndex &index, bool forPass) {
  * @param index
  */
 void MainWindow::on_treeView_clicked(const QModelIndex &index) {
+    dbg() << "Hello\n";
   bool cleared = ui->treeView->currentIndex().flags() == Qt::NoItemFlags;
   currentDir =
       Util::getDir(ui->treeView->currentIndex(), false, model, proxyModel);

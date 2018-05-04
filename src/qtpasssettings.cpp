@@ -124,9 +124,11 @@ bool QtPassSettings::isUsePass(const bool &defaultValue) {
   return getBoolValue(SettingsConstants::usePass, defaultValue);
 }
 
-void QtPassSettings::setUsePass(const bool &usePass) {
+void QtPassSettings::setUsePass(const bool &usePass, const bool &useKeybase) {
   if (usePass) {
     QtPassSettings::pass = &QtPassSettings::realPass;
+  } else if(useKeybase){
+    QtPassSettings::pass = &QtPassSettings::keybase;
   } else {
     QtPassSettings::pass = &QtPassSettings::imitatePass;
   }
@@ -639,14 +641,13 @@ void QtPassSettings::setSetting(const QString &key, const QVariant &value) {
 
 Pass *QtPassSettings::getPass() {
   if (!pass) {
+    if (isUsePass()) {
+      QtPassSettings::pass = &QtPassSettings::realPass;
+    } else if(isUseGit()){
+      QtPassSettings::pass = &QtPassSettings::imitatePass;
+    } else {
       QtPassSettings::pass = &QtPassSettings::keybase;
-    /* if (isUsePass()) { */
-    /*   QtPassSettings::pass = &QtPassSettings::realPass; */
-    /* } else if(isUseGit()){ */
-    /*   QtPassSettings::pass = &QtPassSettings::imitatePass; */
-    /* } else { */
-    /*   QtPassSettings::pass = &QtPassSettings::keybase; */
-    /* } */
+    }
     pass->init();
   }
   return pass;

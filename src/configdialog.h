@@ -31,7 +31,7 @@ public:
   void setKeybasePath(QString);
   void setStorePath(QString);
   void setProfiles(QHash<QString, QString>, QString);
-  void usePass(bool usePass);
+  void usePass(bool usePass, bool useKeybase);
   void useClipboard(Enums::clipBoardType);
   void useSelection(bool useSelection);
   void useAutoclear(bool useAutoclear);

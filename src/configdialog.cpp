@@ -122,13 +122,20 @@ bool ConfigDialog::usePass() { return ui->radioButtonPass->isChecked(); }
  * Update radio buttons accordingly.
  * @param usePass
  */
-void ConfigDialog::usePass(bool usePass) {
+void ConfigDialog::usePass(bool usePass, bool useKeybase) {
   if (usePass) {
     ui->radioButtonNative->setChecked(false);
+    ui->radioButtonKeybase->setChecked(false);
     ui->radioButtonPass->setChecked(true);
+  } else if(useKeybase) {
+    ui->radioButtonNative->setChecked(false);
+    ui->radioButtonKeybase->setChecked(true);
+    ui->radioButtonPass->setChecked(false);
   } else {
     ui->radioButtonNative->setChecked(true);
+    ui->radioButtonKeybase->setChecked(false);
     ui->radioButtonPass->setChecked(false);
+
   }
   setGroupBoxState();
 }

@@ -52,7 +52,7 @@ public:
   static void setMaximized(const bool &maximized);
 
   static bool isUsePass(const bool &defaultValue = QVariant().toBool());
-  static void setUsePass(const bool &usePass);
+  static void setUsePass(const bool &usePass, const bool &useKeybase);
 
   static Enums::clipBoardType getClipBoardType(
       const Enums::clipBoardType &defaultvalue = Enums::CLIPBOARD_NEVER);

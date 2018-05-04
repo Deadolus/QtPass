@@ -18,7 +18,7 @@ class Keybase : public Pass, private simpleTransaction {
   void executeGit(PROCESS id, const QStringList &args,
                   QString input = QString(), bool readStdout = true,
                   bool readStderr = true);
-  void executeGpg(PROCESS id, const QStringList &args,
+  void executeKeybase(PROCESS id, const QStringList &args,
                   QString input = QString(), bool readStdout = true,
                   bool readStderr = true);
 
